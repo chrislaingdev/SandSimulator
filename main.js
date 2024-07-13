@@ -1,20 +1,22 @@
 let canvasElement = /** @type {CanvasRenderingContext2D} */ document.getElementById("canvas");
 let canvasContext = canvasElement.getContext("2d");
 const gridSize = 10;
+const canvasWidth = 400;
+const canvasHeight = 600;
 
 //square 59 is bottom of canvas grid
 //square 39 is furthest of canvas
 
 function createGrid(){
   //creating vertical lines
-  for(let i = 1; i < 40; i++){
+  for(let i = 1; i < canvasWidth / gridSize; i++){
     canvasContext.moveTo(gridSize * i, 0);
-    canvasContext.lineTo(gridSize * i, 600);
+    canvasContext.lineTo(gridSize * i, canvasHeight);
   }
   //creating horizontal lines
-  for(let i = 1; i < 60; i++){
+  for(let i = 1; i < canvasHeight / gridSize; i++){
     canvasContext.moveTo(0, gridSize * i);
-    canvasContext.lineTo(400, gridSize * i);
+    canvasContext.lineTo(canvasWidth, gridSize * i);
   }
   canvasContext.stroke();
 }
@@ -35,14 +37,54 @@ function getMousePosition(canvas, event){
   let y = event.clientY - rect.top;
   let [gridX, gridY] = [Math.floor(x /10), Math.floor(y /10)];
   console.log("Coordinate x: " + gridX, "Coordinate y: " + gridY);
+  return [gridX, gridY]
 }
 
 //Event listener for mouse click
 canvasElement.addEventListener("mousedown", function (e) {
-  getMousePosition(canvasElement, e);
+  let [coorX, coorY] = getMousePosition(canvasElement, e);
+  colorGrid(coorX, coorY);
+  
 });
 
-colorGrid(2 ,2);
+class Square{
+  constructor(x, y){
+    this.x = x;
+    this.y = y;
+    this.active = false;
+  }
+};
+
+class Squares{
+  constructor(){
+    this.squares = [];
+  }
+
+  createSquare(x, y){
+    let newSquare = new Square(x , y);
+    this.squares.push(newSquare);
+
+
+
+  }
+}
+
+let testSquares = new Squares;
+function testCreate(){
+  for(let i = 0; i < 10; i++){
+    testSquares.createSquare(0, i);
+  }
+  
+}
+
+testCreate();
+
+console.log(testSquares.squares[8]);
+
+
+
+
+
 
 
 
