@@ -6,7 +6,7 @@ const canvasWidth = 400;
 const canvasHeight = 600;
 
 class Square{
-  constructor(x, y, coor){
+  constructor(x, y){
     this.x = x;
     this.y = y;
     this.coor=`${x},${y}`;
@@ -23,7 +23,6 @@ class Squares{
     let x = 0;
     let y = 0;
     let arr = [];
-    
     for(let i = 0; i <= ((canvasWidth / gridSize) * (canvasHeight / gridSize)); i++){
       if (x > (canvasWidth / gridSize) - 1){
         x = 0;
@@ -31,12 +30,37 @@ class Squares{
         this.squares.push(arr);
         arr = [];
       }
-
       let newSquare = new Square(x , 0 + y);
       arr.push(newSquare);
       x++;
     } 
   }
+
+  activateSquare(x, y){
+    this.squares[y][x].active = true;
+    canvasContext.rect(x * gridSize, y * gridSize, gridSize, gridSize);
+    canvasContext.fillStyle='brown';
+    canvasContext.fill();
+    if(y < 59){
+      setTimeout(this.tryFalling.bind(this,x, y), 500);
+    }
+  }
+
+  tryFalling(x,y){
+    if(this.squares[y][x].active){
+      if(!this.squares[y + 1][x].active){
+        
+        this.squares[y][x].active = false;
+        console.log('test');
+        canvasContext.rect(x * gridSize, y * gridSize, gridSize, gridSize);
+        canvasContext.fillStyle='green';
+        canvasContext.fill();
+        
+        setTimeout(this.activateSquare.bind(this,x, y + 1), 500); 
+      }
+    }
+  }
+
 }
 
 //creating the 2dimensional array of canvas grid instances of the class Square;
@@ -60,14 +84,8 @@ function createGrid(){
   canvasContext.stroke();
 }
 
-
 createGrid();
 
-function colorGrid(x, y){
-  canvasContext.rect(x * gridSize, y * gridSize, gridSize, gridSize);
-  canvasContext.fillStyle='brown';
-  canvasContext.fill();
-}
 
 //converting mouse position on canvas to desired grid coordinate
 function getMousePosition(canvas, event){
@@ -82,7 +100,7 @@ function getMousePosition(canvas, event){
 //Event listener for mouse click
 canvasElement.addEventListener("mousedown", function (e) {
   let [coorX, coorY] = getMousePosition(canvasElement, e);
-  colorGrid(coorX, coorY);
+  gridSquares.activateSquare(coorX, coorY);
   
 });
 
@@ -90,6 +108,6 @@ canvasElement.addEventListener("mousedown", function (e) {
 
 
 
-gridSquares.squares[0][10].active = true;
+
 console.log(gridSquares.squares[0][10]);
 
