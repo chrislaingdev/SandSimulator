@@ -1,11 +1,50 @@
 let canvasElement = /** @type {CanvasRenderingContext2D} */ document.getElementById("canvas");
 let canvasContext = canvasElement.getContext("2d");
+
 const gridSize = 10;
 const canvasWidth = 400;
 const canvasHeight = 600;
 
-//square 59 is bottom of canvas grid
-//square 39 is furthest of canvas
+class Square{
+  constructor(x, y, coor){
+    this.x = x;
+    this.y = y;
+    this.coor=`${x},${y}`;
+    this.active = false;
+  }
+};
+
+class Squares{
+  constructor(){
+    this.squares = [];
+  }
+
+  createSquares(){
+    let x = 0;
+    let y = 0;
+    let arr = [];
+    
+    for(let i = 0; i <= ((canvasWidth / gridSize) * (canvasHeight / gridSize)); i++){
+      if (x > (canvasWidth / gridSize) - 1){
+        x = 0;
+        y++;
+        this.squares.push(arr);
+        arr = [];
+      }
+
+      let newSquare = new Square(x , 0 + y);
+      arr.push(newSquare);
+      x++;
+    } 
+  }
+}
+
+//creating the 2dimensional array of canvas grid instances of the class Square;
+let gridSquares = new Squares;
+gridSquares.createSquares();
+console.log(gridSquares.squares);
+
+
 
 function createGrid(){
   //creating vertical lines
@@ -47,44 +86,10 @@ canvasElement.addEventListener("mousedown", function (e) {
   
 });
 
-class Square{
-  constructor(x, y){
-    this.x = x;
-    this.y = y;
-    this.active = false;
-  }
-};
-
-class Squares{
-  constructor(){
-    this.squares = [];
-  }
-
-  createSquare(x, y){
-    let newSquare = new Square(x , y);
-    this.squares.push(newSquare);
-
-
-
-  }
-}
-
-let testSquares = new Squares;
-function testCreate(){
-  for(let i = 0; i < 10; i++){
-    testSquares.createSquare(0, i);
-  }
-  
-}
-
-testCreate();
-
-console.log(testSquares.squares[8]);
 
 
 
 
-
-
-
+gridSquares.squares[0][10].active = true;
+console.log(gridSquares.squares[0][10]);
 
