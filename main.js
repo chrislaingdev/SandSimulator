@@ -38,23 +38,35 @@ class Squares{
 
   activateSquare(x, y){
     this.squares[y][x].active = true;
+    console.log(this.squares[y][x].active);
+    console.log('above is ' + this.squares[y - 1][x].active)
+    canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
+    canvasContext.beginPath();
     canvasContext.rect(x * gridSize, y * gridSize, gridSize, gridSize);
     canvasContext.fillStyle='brown';
     canvasContext.fill();
-    if(y < 59){
-      setTimeout(this.tryFalling.bind(this,x, y), 500);
+    if(y < 59 && this.squares[y + 1][x].active === false){
+      this.squares[y][x].active = false;
+      
+      setTimeout(this.activateSquare.bind(this,x, (y + 1)), 500); 
+      
+      
+      //setTimeout(this.tryFalling.bind(this,x, y), 500);
     }
+    createGrid();
   }
 
   tryFalling(x,y){
     if(this.squares[y][x].active){
       if(!this.squares[y + 1][x].active){
         
-        this.squares[y][x].active = false;
-        console.log('test');
-        canvasContext.rect(x * gridSize, y * gridSize, gridSize, gridSize);
-        canvasContext.fillStyle='green';
-        canvasContext.fill();
+        //this.squares[y][x].active = false;
+        //console.log(this.squares[y][x].active);
+        canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
+        //createGrid();
+        //canvasContext.rect(x * gridSize, y * gridSize, gridSize, gridSize);
+        //canvasContext.fillStyle='green';
+        //canvasContext.fill();
         
         setTimeout(this.activateSquare.bind(this,x, y + 1), 500); 
       }
