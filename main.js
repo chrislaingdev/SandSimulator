@@ -4,7 +4,7 @@ let canvasContext = canvasElement.getContext("2d");
 const gridSize = 10;
 const canvasWidth = 400;
 const canvasHeight = 600;
-const runtime = 5000;
+const runtime = 20;
 
 class Square{
   constructor(x, y){
@@ -63,22 +63,30 @@ class Squares{
     let arr = [];
     for(let row = 0; row < 60; row ++){
       for(let col = 0; col < 40; col++){
-        if(this.squares[row][col].active && col < 59 && !this.squares[row + 1][col].active){
-          console.log(this.squares[row][col]);
-          let coor = [row, col];
-          arr.push(coor);
+        //console.log("row: " + row, "col: " + col)
+        if (row + 1 < 60){
+          if(this.squares[row][col].active && col < 59 && !this.squares[row + 1][col].active){
+            //console.log("trying to fall: " + row + "," + col);
+            let coor = [row, col];
+            arr.push(coor);
+          }
+
         }
       }
     }
-    console.log(arr);//pick up HEREarr [[1,2]]
-    for(let i = 0; i <= arr.length; i++){
-      console.log("y: " + arr[i][0]);
-      console.log(arr[i][1]);
-      let y = arr[i][0];
-      let x = arr[i][1];
-      this.squares[y][x].active = false;
-      this.squares[y + 1][x].active = true;
+    //console.log(arr);//pick up HEREarr [[1,2]]
+    if(arr.length > 0){
 
+
+      for(let i = 0; i < arr.length; i++){
+        //console.log("y: " + arr[i][0]);
+        //console.log(arr[i][1]);
+        let y = arr[i][0];
+        let x = arr[i][1];
+        this.squares[y][x].active = false;
+        this.squares[y + 1][x].active = true;
+        
+      }
     }
   }
 
