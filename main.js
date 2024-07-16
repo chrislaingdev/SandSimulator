@@ -60,36 +60,65 @@ class Squares{
   }
   
   tryFallingDown(){
-    let arr = [];
+    let belowArr = [];
+    let bRightArr = [];
+    let bLeftArr = [];
     for(let row = 0; row < 60; row ++){
       for(let col = 0; col < 40; col++){
-        //console.log("row: " + row, "col: " + col)
-        if (row + 1 < 60){
+        
+        // check if the square below is active so that it may fall down. 
+        if (row + 1 < 60 && this.squares[row][col].active){
           if(this.squares[row][col].active && col < 59 && !this.squares[row + 1][col].active){
-            //console.log("trying to fall: " + row + "," + col);
+            
             let coor = [row, col];
-            arr.push(coor);
+            belowArr.push(coor);
+          } else if(this.squares[row][col].active && col < 59 && this.squares[row + 1][col].active){
+              if(col + 1 < 40  && col - 1 > -1){
+                if(!this.squares[row + 1][col + 1].active && !this.squares[row + 1][col - 1].active){
+                  let dir = Math.round(Math.random());
+                  let coor = [row, col];
+                  if(dir === 0){
+                    bLeftArr.push(coor);
+                  } else{
+                    bRightArr.push(coor);
+                  }
+                } else if(!this.squares[row + 1][col + 1].active){
+                  let coor = [row, col];
+                  bRightArr.push(coor);
+                } else if(!this.squares[row + 1][col - 1].active){
+                  let coor = [row, col];
+                  bLeftArr.push(coor);
+                }
+              }
           }
-
         }
       }
     }
-    //console.log(arr);//pick up HEREarr [[1,2]]
-    if(arr.length > 0){
-
-
-      for(let i = 0; i < arr.length; i++){
-        //console.log("y: " + arr[i][0]);
-        //console.log(arr[i][1]);
-        let y = arr[i][0];
-        let x = arr[i][1];
+    if(belowArr.length > 0){
+      for(let i = 0; i < belowArr.length; i++){
+        let y = belowArr[i][0];
+        let x = belowArr[i][1];
         this.squares[y][x].active = false;
         this.squares[y + 1][x].active = true;
-        
+      }
+    }
+    if(bRightArr.length > 0){
+      for(let i = 0; i < bRightArr.length; i++){
+        let y = bRightArr[i][0];
+        let x = bRightArr[i][1];
+        this.squares[y][x].active = false;
+        this.squares[y + 1][x + 1].active = true;
+      }
+    }
+    if(bLeftArr.length > 0){
+      for(let i = 0; i < bLeftArr.length; i++){
+        let y = bLeftArr[i][0];
+        let x = bLeftArr[i][1];
+        this.squares[y][x].active = false;
+        this.squares[y + 1][x - 1].active = true;
       }
     }
   }
-
 }
 
 //creating the 2dimensional array of canvas grid instances of the class Square;
