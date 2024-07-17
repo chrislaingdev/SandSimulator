@@ -180,7 +180,7 @@ function createGrid(){
   canvasContext.stroke();
 }
 
-createGrid();
+
 
 
 //converting mouse position on canvas to desired grid coordinate
