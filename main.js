@@ -5,6 +5,25 @@ const gridSize = 10;
 const canvasWidth = 400;
 const canvasHeight = 600;
 const runtime = 20;
+let gridActive = false;
+let sandColors = ['#f6d7b0', "#f2d2a9", "#eccca2", "#e7c496", "#e1bf92"];
+
+function getSandColor(){
+  let choice = Math.floor(Math.random() * sandColors.length);
+  return sandColors[choice];
+}
+
+function toggleGrid(){
+  if(gridActive){
+    gridActive = false;
+  }else{
+    gridActive = true;
+  };
+}
+
+
+
+
 
 class Square{
   constructor(x, y){
@@ -12,6 +31,7 @@ class Square{
     this.y = y;
     this.coor=`${x},${y}`;
     this.active = false;
+    this.color = getSandColor();
   }
 };
 
@@ -41,22 +61,40 @@ class Squares{
     canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
     for(let row = 0; row < 60; row ++){
       for(let col = 0; col < 40; col++){
-
         if (this.squares[row][col].active){
           canvasContext.beginPath();
           canvasContext.rect(col * gridSize, row * gridSize, gridSize, gridSize);
-          canvasContext.fillStyle='brown';
+          canvasContext.fillStyle=this.squares[row][col].color;
+          
           canvasContext.fill();
 
         }
       }
     }
-    createGrid();
+
+    if(gridActive){
+      createGrid();
+    }
   }
 
 
   activateSquare(x, y){
-    this.squares[y][x].active = true;    
+    this.squares[y][x].active = true;  
+    this.squares[y][x + 1].active = true;
+    this.squares[y][x - 1].active = true;
+    this.squares[y - 1][x + 2].active = true; 
+    this.squares[y - 1][x - 2].active = true; 
+    this.squares[y - 2][x - 3].active = true; 
+    this.squares[y - 2][x + 3].active = true; 
+    this.squares[y + 1][x].active = true;
+    this.squares[y - 2][x].active = true; 
+
+    
+    // #          #
+    //  #   #    #
+     //  #  *  #
+     //     #   
+  
   }
   
   tryFallingDown(){
